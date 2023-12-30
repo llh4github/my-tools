@@ -1,4 +1,4 @@
-package io.github.llh4github.smmtemplate.api
+package io.github.llh4github.mytools.api
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

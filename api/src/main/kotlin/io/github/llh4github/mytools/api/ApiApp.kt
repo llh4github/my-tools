@@ -1,4 +1,4 @@
-package io.github.llh4github.smmtemplate.api
+package io.github.llh4github.mytools.api
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
