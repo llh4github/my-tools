@@ -12,6 +12,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation(project(":commons"))
+    implementation(libs.knife4j.openapi3)
 }
 
 
