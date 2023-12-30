@@ -1,4 +1,4 @@
-package io.github.llh4github.mytools.utilities
+package io.github.llh4github.mytools.commons
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.time.LocalDateTime
