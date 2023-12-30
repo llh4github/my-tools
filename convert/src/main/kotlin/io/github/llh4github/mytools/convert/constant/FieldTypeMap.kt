@@ -1,6 +1,5 @@
 package io.github.llh4github.mytools.convert.constant
 
-import io.github.llh4github.mytools.commons.AppException
 
 /**
  *

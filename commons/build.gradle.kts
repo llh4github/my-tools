@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.swagger.annotations)
+    api(libs.swagger.annotations)
 }

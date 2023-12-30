@@ -14,6 +14,7 @@ enum class AppErrorEnums(
     NO_PERMISSION_ERROR("401002", "无权限"),
     DATA_NO_FOUND("501001", "数据不存在"),
     DATA_EXISTED_FOUND("501002", "数据已存在"),
+    LIB_ERROR("701001", "工具库错误"),
     THIRD_PARTY_ERROR("801001", "第三方服务出错"),
 
 }
@@ -28,3 +29,5 @@ enum class NoErrorEnums(
     DELETED("200", "删除成功"),
     OPERATED("200", "操作成功"),
 }
+
+data class ErrorMsg(override val code: String, override val msg: String) : ErrorConvention
