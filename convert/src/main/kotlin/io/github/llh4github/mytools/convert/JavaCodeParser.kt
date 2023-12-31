@@ -1,5 +1,6 @@
 package io.github.llh4github.mytools.convert
 
+import io.github.llh4github.mytools.convert.dto.ClassInfo
 import io.github.llh4github.mytools.convert.dto.Convert2GoConfig
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -10,9 +11,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
  */
 object JavaCodeParser {
     private val logger = KotlinLogging.logger {}
-
-    fun parse(config: Convert2GoConfig) {
-        JavaCodeParserInner.parseJavaGrammar(config.code)
+    fun parse(config: Convert2GoConfig): List<ClassInfo> {
+        return JavaCodeParserInner.parseJavaGrammar(config.code)
+            .types.map { JavaCodeParserInner.parseJavaClass(it) }
+            .toList()
     }
 
 

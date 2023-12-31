@@ -2,10 +2,14 @@ package io.github.llh4github.mytools.convert
 
 import com.github.javaparser.StaticJavaParser
 import com.github.javaparser.ast.CompilationUnit
+import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.TypeDeclaration
 import io.github.llh4github.mytools.commons.AppErrorEnums
 import io.github.llh4github.mytools.commons.AppException
+import io.github.llh4github.mytools.convert.dto.ClassInfo
+import io.github.llh4github.mytools.convert.dto.FieldInfo
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlin.jvm.optionals.getOrNull
 
 /**
  *
@@ -15,6 +19,8 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 internal object JavaCodeParserInner {
 
     private val logger = KotlinLogging.logger {}
+
+
     fun parseJavaGrammar(code: String): CompilationUnit {
         try {
             return StaticJavaParser.parse(code)
@@ -24,22 +30,35 @@ internal object JavaCodeParserInner {
         }
     }
 
-    fun parseJavaClass(typeDeclaration: TypeDeclaration<*>) {
-
+    fun parseJavaClass(typeDeclaration: TypeDeclaration<*>): ClassInfo {
+        val fieldNameFromMethod = typeDeclaration.fieldFromGetOrSetMethod()
+        val hasLombok = typeDeclaration.hasClassLombokField()
+        val fields = typeDeclaration.fields.flatMap { parseFieldInfo(it) }
+            .toList()
+        return ClassInfo(
+            typeDeclaration.nameAsString,
+            fields,
+            fieldNameFromMethod,
+            typeDeclaration.javadocComment.getOrNull()?.asString(),
+            hasLombok,
+        )
     }
 
-    /**
-     * getter,setter方法转换为属性名
-     *
-     * 简单处理，不一定准确
-     */
-    fun methodToFieldName(method: String): String {
-        if (method.startsWith("get")) {
-            return method.removePrefix("get").replaceFirstChar { it.lowercaseChar() }
-        }
-        if (method.startsWith("set")) {
-            return method.removePrefix("set").replaceFirstChar { it.lowercaseChar() }
-        }
-        return method
+    private fun parseFieldInfo(declaration: FieldDeclaration): List<FieldInfo> {
+        val visible = declaration.fieldVisible()
+        val doc = declaration.javadocComment.getOrNull()?.asString()
+        val jsonAlias = declaration.jsonAlias()
+        val apiDoc = declaration.apiDoc()
+        return declaration.variables.map {
+            val name = it.nameAsString
+            val varType = it.type.asClassOrInterfaceType()
+            val typeName = varType.nameAsString
+            val list = varType.typeArguments.getOrNull()
+                ?.map { t -> t.asString() }
+                ?.toList() ?: emptyList()
+            FieldInfo(name, visible, typeName, list, doc, apiDoc, jsonAlias)
+        }.toList()
     }
+
+
 }

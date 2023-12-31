@@ -23,7 +23,7 @@ class JavaCodeParserInnerTest {
         ]
     )
     fun `test method name`(method: String, result: String) {
-        val rs = JavaCodeParserInner.methodToFieldName(method)
+        val rs = fieldNameRemovePrefix(method)
         assertEquals(result, rs)
     }
 

@@ -15,8 +15,19 @@ data class ClassInfo(
      * 类字段
      */
     val fields: List<FieldInfo>,
+
+    /**
+     * 从方法中提取的字段名
+     */
+    val fieldNameFromMethod: List<String> = emptyList(),
     /**
      * 类注释
      */
     val doc: String? = null,
+
+
+    /**
+     * 是否有特定的
+     */
+    val hasDataLombok: Boolean = false,
 )

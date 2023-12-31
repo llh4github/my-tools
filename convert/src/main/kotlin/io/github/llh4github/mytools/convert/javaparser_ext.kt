@@ -20,6 +20,46 @@ internal fun FieldDeclaration.fieldVisible(): FieldVisible {
     return FieldVisible.PRIVATE
 }
 
+internal fun FieldDeclaration.apiDoc(): String? {
+    val anno = this.annotations.firstOrNull { it.nameAsString == "ApiModelProperty" }
+    if (anno == null) return null
+    return when (anno) {
+        is SingleMemberAnnotationExpr -> {
+            return anno.memberValue.asStringLiteralExpr().asString()
+        }
+
+        is NormalAnnotationExpr -> {
+            anno.pairs.firstOrNull { ele -> ele.name.asString() == "value" }
+                ?.value?.asStringLiteralExpr()?.asString()
+        }
+
+        else -> null
+    }
+}
+
+internal fun FieldDeclaration.jsonAlias(): List<String> {
+    val list = mutableListOf<String>()
+    this.annotations
+        .filter { it.nameAsString == "JsonAlias" }
+        .forEach {
+            if (it is SingleMemberAnnotationExpr) {
+                (it.memberValue.asArrayInitializerExpr()).values.forEach { ele ->
+                    val alias = ele.asStringLiteralExpr().asString()
+                    list.add(alias)
+                }
+            }
+            if (it is NormalAnnotationExpr) {
+                it.pairs.filter { ele -> ele.nameAsString == "value" }
+                    .forEach { ele ->
+                        ele.value.asArrayInitializerExpr()
+                            .values.forEach { alias ->
+                                list.add(alias.asStringLiteralExpr().asString())
+                            }
+                    }
+            }
+        }
+    return list
+}
 
 /**
  * 是否被lombok注解标记为不可访问
@@ -64,4 +104,11 @@ internal fun TypeDeclaration<*>.hasClassLombokField(): Boolean {
     return this.annotations.any {
         LombokAnnoName.lombokClassField.contains(it.nameAsString)
     }
+}
+
+internal fun TypeDeclaration<*>.fieldFromGetOrSetMethod(): List<String> {
+    return this.methods.map { it.nameAsString }
+        .filter { it.startsWith("get") || it.startsWith("set") }
+        .map { fieldNameRemovePrefix(it) }
+        .toList()
 }

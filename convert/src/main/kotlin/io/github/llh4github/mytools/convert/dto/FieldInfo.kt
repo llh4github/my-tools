@@ -1,5 +1,7 @@
 package io.github.llh4github.mytools.convert.dto
 
+import io.github.llh4github.mytools.convert.constant.FieldVisible
+
 /**
  * Java 字段信息
  *
@@ -11,6 +13,7 @@ data class FieldInfo(
      * 字段名
      */
     val fieldName: String,
+    val visible: FieldVisible,
     /**
      * 字段类型名
      */
@@ -23,6 +26,11 @@ data class FieldInfo(
      * 字段注释
      */
     val doc: String? = null,
+
+    /**
+     * swagger注解内容
+     */
+    val apiDoc: String? = null,
     /**
      * 字段JSON别名
      */
