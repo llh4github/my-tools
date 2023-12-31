@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.TypeDeclaration
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import io.github.llh4github.mytools.convert.constant.FieldVisible
+import io.github.llh4github.mytools.convert.constant.LombokAnnoName
 
 /**
  * 字段可见性
@@ -54,4 +55,13 @@ internal fun TypeDeclaration<*>.memberFieldNames(): List<String> {
         .map { it.nameAsString }
         .filter { it.isNotEmpty() }
         .toList()
+}
+
+/**
+ * 类上是有否有@Data,@Setter,@Getter之中的注解
+ */
+internal fun TypeDeclaration<*>.hasClassLombokField(): Boolean {
+    return this.annotations.any {
+        LombokAnnoName.lombokClassField.contains(it.nameAsString)
+    }
 }
