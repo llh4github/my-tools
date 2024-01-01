@@ -17,6 +17,8 @@ object FieldTypeMap {
      */
     private val collectionNameList = listOf("List", "ArrayList", "Set", "HashSet")
 
+    private val mapNameList = listOf("Map", "HashMap")
+
     init {
         basicMap["String"] = "string"
         basicMap["Integer"] = "int"
@@ -45,6 +47,9 @@ object FieldTypeMap {
         }
         if (collectionNameList.contains(type)) {
             return "[]"
+        }
+        if (mapNameList.contains(type)) {
+            return "map"
         }
         return type
 

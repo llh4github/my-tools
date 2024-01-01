@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource
  * Created At 2023/12/30 23:40
  * @author llh
  */
-class JavaCodeParserInnerTest {
+class JavaToGoConvertInnerTest {
 
 
     @ParameterizedTest

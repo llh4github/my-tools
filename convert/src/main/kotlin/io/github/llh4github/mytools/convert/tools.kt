@@ -14,3 +14,7 @@ internal fun fieldNameRemovePrefix(method: String): String {
     }
     return method
 }
+
+internal fun uppercaseFirstChar(name: String): String {
+    return name.replaceFirstChar { it.uppercaseChar() }
+}

@@ -12,4 +12,6 @@ internal object LombokAnnoName {
      */
     val lombokClassField = listOf("Data", "Getter", "Setter")
 
+    val privateAccessLevel = listOf("NONE", "PRIVATE", "PROTECTED")
+
 }

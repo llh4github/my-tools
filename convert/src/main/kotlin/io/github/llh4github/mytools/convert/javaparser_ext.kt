@@ -70,13 +70,13 @@ internal fun FieldDeclaration.markNoAccess(): Boolean {
         .map {
             when (it) {
                 is SingleMemberAnnotationExpr -> {
-                    it.memberValue.asStringLiteralExpr().asString() == "AccessLevel.NONE"
+                    LombokAnnoName.privateAccessLevel.contains(it.memberValue.asFieldAccessExpr().nameAsString)
                 }
 
                 is NormalAnnotationExpr -> {
                     it.pairs.filter { ele -> ele.nameAsString == "value" }
-                        .map { ele -> ele.value.asStringLiteralExpr().asString() == "AccessLevel.NONE" }
-                        .getOrElse(0) { false }
+                        .map { ele -> ele.value.asFieldAccessExpr().nameAsString }
+                        .any { ele -> LombokAnnoName.privateAccessLevel.contains(ele) }
                 }
 
                 else -> {
@@ -107,7 +107,12 @@ internal fun TypeDeclaration<*>.hasClassLombokField(): Boolean {
 }
 
 internal fun TypeDeclaration<*>.fieldFromGetOrSetMethod(): List<String> {
-    return this.methods.map { it.nameAsString }
+    return this.methods
+        .asSequence()
+        .filter { it.isPublic }
+        .filter { !it.isStatic }
+        .filter { !it.isFinal }
+        .map { it.nameAsString }
         .filter { it.startsWith("get") || it.startsWith("set") }
         .map { fieldNameRemovePrefix(it) }
         .toList()

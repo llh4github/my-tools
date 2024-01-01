@@ -9,7 +9,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
  * Created At 2023/12/30 16:44
  * @author llh
  */
-object JavaCodeParser {
+object JavaToGoConvert {
     private val logger = KotlinLogging.logger {}
     fun parse(config: Convert2GoConfig): List<ClassInfo> {
         return JavaCodeParserInner.parseJavaGrammar(config.code)

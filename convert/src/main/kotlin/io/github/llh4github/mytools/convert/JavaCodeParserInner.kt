@@ -51,11 +51,16 @@ internal object JavaCodeParserInner {
         val apiDoc = declaration.apiDoc()
         return declaration.variables.map {
             val name = it.nameAsString
-            val varType = it.type.asClassOrInterfaceType()
-            val typeName = varType.nameAsString
-            val list = varType.typeArguments.getOrNull()
-                ?.map { t -> t.asString() }
-                ?.toList() ?: emptyList()
+            var typeName = ""
+            var list = emptyList<String>()
+            if (it.type.isPrimitiveType) {
+                typeName = it.type.asPrimitiveType().asString()
+            } else {
+                typeName = it.type.asClassOrInterfaceType().nameAsString
+                list = it.type.asClassOrInterfaceType().typeArguments.getOrNull()
+                    ?.map { t -> t.asString() }
+                    ?.toList() ?: emptyList()
+            }
             FieldInfo(name, visible, typeName, list, doc, apiDoc, jsonAlias)
         }.toList()
     }
