@@ -4,6 +4,13 @@ plugins {
     id("spring-conventions")
 }
 
+graalvmNative {
+    binaries {
+        named("main") {
+            imageName.set(rootProject.name + "-" + project.version)
+        }
+    }
+}
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
