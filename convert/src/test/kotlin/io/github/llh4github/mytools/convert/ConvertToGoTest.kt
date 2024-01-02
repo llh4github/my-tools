@@ -29,7 +29,7 @@ class ConvertToGoTest {
     )
     fun `test Data Anno`(code: String) {
         val cnf = Convert2GoConfig(code.trimIndent(), reservePrivateField = false)
-        val rs = JavaToGoConvert.parse(cnf)
+        val rs = JavaToGoConvert.convertModel(cnf)
             .map { ConvertToGo.convert(it, cnf) }
             .toList()
         val exp = """
@@ -60,7 +60,7 @@ type Demo struct {
     )
     fun `test reserve private field`(code: String) {
         val cnf = Convert2GoConfig(code.trimIndent())
-        val rs = JavaToGoConvert.parse(cnf)
+        val rs = JavaToGoConvert.convertModel(cnf)
             .map { ConvertToGo.convert(it, cnf) }
             .toList()
         val exp = """
@@ -91,7 +91,7 @@ type Demo struct {
     )
     fun `test json alias`(code: String) {
         val cnf = Convert2GoConfig(code.trimIndent(), reservePrivateField = true, expendJsonAlias = true)
-        val rs = JavaToGoConvert.parse(cnf)
+        val rs = JavaToGoConvert.convertModel(cnf)
             .map { ConvertToGo.convert(it, cnf) }
             .toList()
         val exp = """
@@ -128,7 +128,7 @@ type Demo struct {
     )
     fun `test field doc`(code: String) {
         val cnf = Convert2GoConfig(code.trimIndent())
-        val rs = JavaToGoConvert.parse(cnf)
+        val rs = JavaToGoConvert.convertModel(cnf)
             .map { ConvertToGo.convert(it, cnf) }
             .toList()
         val exp = """
@@ -159,7 +159,7 @@ type Demo struct {
     )
     fun `test get set method`(code: String) {
         val cnf = Convert2GoConfig(code.trimIndent())
-        val rs = JavaToGoConvert.parse(cnf)
+        val rs = JavaToGoConvert.convertModel(cnf)
             .map { ConvertToGo.convert(it, cnf) }
             .toList()
         val exp = """

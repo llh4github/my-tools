@@ -11,7 +11,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
  */
 object JavaToGoConvert {
     private val logger = KotlinLogging.logger {}
-    fun parse(config: Convert2GoConfig): List<ClassInfo> {
+    fun convertModel(config: Convert2GoConfig): List<ClassInfo> {
         return JavaCodeParserInner.parseJavaGrammar(config.code)
             .types.map { JavaCodeParserInner.parseJavaClass(it) }
             .toList()
