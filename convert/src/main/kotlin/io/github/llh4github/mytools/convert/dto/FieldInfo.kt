@@ -35,4 +35,6 @@ data class FieldInfo(
      * 字段JSON别名
      */
     val jsonAlias: List<String> = emptyList(),
+
+    var finalVisible: FieldVisible = FieldVisible.PRIVATE,
 )

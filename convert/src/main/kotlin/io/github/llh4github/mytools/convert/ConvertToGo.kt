@@ -31,17 +31,20 @@ internal object ConvertToGo {
         config: Convert2GoConfig
     ) {
         val hasLombokInClass = info.hasDataLombok
-        info.fields
-            .filter { if (config.reservePrivateField) true else it.visible != FieldVisible.MARK_NO_ACCESS }
-            .forEach { field ->
-                if (config.expendJsonAlias) {
-                    handleExpendJsonAlias(sb, field, hasLombokInClass)
-                } else {
-                    handleSimpleField(sb, field, null, hasLombokInClass)
-                    sb.append(handleJsonTag(field.jsonAlias))
-                }
-                sb.append("\n")
+        val fields = if (config.reservePrivateField) {
+            info.publicFields + info.privateField
+        } else {
+            info.publicFields
+        }
+        fields.forEach { field ->
+            if (config.expendJsonAlias) {
+                handleExpendJsonAlias(sb, field, hasLombokInClass)
+            } else {
+                handleSimpleField(sb, field, null, hasLombokInClass)
+                sb.append(handleJsonTag(field.jsonAlias))
             }
+            sb.append("\n")
+        }
     }
 
     private fun handleSimpleField(
@@ -54,7 +57,7 @@ internal object ConvertToGo {
                 .removePrefix("*")
                 .removeSuffix("*/")
                 .removePrefix(" ")
-            sb.append("// $tmp")
+            sb.append("\t// $tmp")
             sb.append("\n")
         }
         field.apiDoc?.also {
@@ -64,17 +67,13 @@ internal object ConvertToGo {
 
         sb.append("\t")
         if (fieldName == null) {
-            if (hasLombokInClass && field.visible == FieldVisible.PRIVATE) {
-                sb.append(uppercaseFirstChar(field.fieldName) + " ")
-            } else if (field.visible == FieldVisible.PUBLIC) {
+            if (field.finalVisible == FieldVisible.PUBLIC) {
                 sb.append(uppercaseFirstChar(field.fieldName) + " ")
             } else {
                 sb.append(field.fieldName + " ")
             }
         } else {
-            if (hasLombokInClass && field.visible == FieldVisible.PRIVATE) {
-                sb.append(uppercaseFirstChar(fieldName) + " ")
-            } else if (field.visible == FieldVisible.PUBLIC) {
+            if (field.finalVisible == FieldVisible.PUBLIC) {
                 sb.append(uppercaseFirstChar(fieldName) + " ")
             } else {
                 sb.append("$fieldName ")
