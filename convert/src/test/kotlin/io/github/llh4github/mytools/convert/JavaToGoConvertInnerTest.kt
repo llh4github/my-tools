@@ -66,4 +66,5 @@ class JavaToGoConvertInnerTest {
             .toList()
         assertEquals(rs, listOf("name", "age", "birthday"))
     }
+
 }

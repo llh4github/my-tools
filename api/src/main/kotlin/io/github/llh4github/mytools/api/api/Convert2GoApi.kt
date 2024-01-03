@@ -24,8 +24,8 @@ class Convert2GoApi : BaseApi() {
 
     @PostMapping
     @Operation(summary = "实体类的转换")
-    fun convert(@RequestBody config: Convert2GoConfig): JsonWrapper<List<ClassInfo>> {
-        val rs = JavaToGoConvert.convertModel(config)
+    fun convert(@RequestBody config: Convert2GoConfig): JsonWrapper<List<String>> {
+        val rs = JavaToGoConvert.convertGoStruct(config)
         return ok(rs)
     }
 }
