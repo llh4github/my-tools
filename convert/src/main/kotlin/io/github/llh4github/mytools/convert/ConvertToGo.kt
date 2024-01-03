@@ -51,11 +51,7 @@ internal object ConvertToGo {
         fieldName: String? = null,
     ) {
         field.doc?.also {
-            val tmp = it.removePrefix("/**")
-                .removePrefix("*")
-                .removeSuffix("*/")
-                .removePrefix(" ")
-            sb.append("\t// $tmp")
+            sb.append(it)
             sb.append("\n")
         }
         field.apiDoc?.also {

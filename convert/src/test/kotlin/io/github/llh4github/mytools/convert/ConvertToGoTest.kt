@@ -32,7 +32,7 @@ class ConvertToGoTest {
         val rs = JavaToGoConvert.convertGoStruct(cnf)
             .toList()
         val exp = """
-// Demo 
+// Demo 由 Demo.java类生成
 type Demo struct { 
 	A int
 	B string
@@ -62,7 +62,7 @@ type Demo struct {
         val rs = JavaToGoConvert.convertGoStruct(cnf)
             .toList()
         val exp = """
-// Demo 
+// Demo 由 Demo.java类生成
 type Demo struct { 
 	A int
 	B string
@@ -92,7 +92,7 @@ type Demo struct {
         val rs = JavaToGoConvert.convertGoStruct(cnf)
             .toList()
         val exp = """
-// Demo 
+// Demo 由 Demo.java类生成
 type Demo struct { 
 		A int `json:"a1" `
 
@@ -113,11 +113,17 @@ type Demo struct {
         strings = ["""
             @Data
        public class Demo{
-        /** A-Doc */
+        /** 
+         * A-Doc 
+         * A2-Doc
+         * A3-Doc
+        */
         private Integer a; 
         /** B-Doc */
         private String b; 
-        /** C-Doc */
+        /** 
+         * C-Doc 
+         */
         @ApiModelProperty("c-api-doc")
         private int c; 
        } 
@@ -128,13 +134,19 @@ type Demo struct {
         val rs = JavaToGoConvert.convertGoStruct(cnf)
             .toList()
         val exp = """
-// Demo 
+// Demo 由 Demo.java类生成
 type Demo struct { 
-	// A-Doc 
+/** 
+  * A-Doc 
+  * A2-Doc
+  * A3-Doc
+ */
 	A int
-	// B-Doc 
+/** B-Doc */
 	B string
-	// C-Doc 
+/** 
+  * C-Doc 
+  */
 	// c-api-doc
 	C int
 }
@@ -158,7 +170,7 @@ type Demo struct {
         val rs = JavaToGoConvert.convertGoStruct(cnf)
             .toList()
         val exp = """
-// Demo 
+// Demo 由 Demo.java类生成
 type Demo struct { 
 	A int
 	B string

@@ -27,6 +27,27 @@ class JavaToGoConvertInnerTest {
         assertEquals(result, rs)
     }
 
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            """
+              /**
+                * a
+                * b  c
+                */
+            """,
+        ]
+    )
+    fun `test doc`(doc: String) {
+        val re = Regex("""/\*\*\n|\*/\n|\*/""")
+        val re2 = Regex("""/n\* """)
+        val rs = doc.trimIndent()
+            .replace(re, " ")
+            .replace(re2, "\n// ")
+//            .removePrefix("/**")
+//            .removePrefix("*/")
+        println(rs)
+    }
 
     @ParameterizedTest
     @ValueSource(strings = ["int a;", "private string name;"])
