@@ -20,7 +20,7 @@ internal object ConvertToGo {
     }
 
     private fun handleClassInfo(info: ClassInfo, sb: StringBuffer) {
-        sb.append("// ${info.className} \n")
+        sb.append("// ${info.className} 由 ${info.className}.java类生成\n")
         info.doc?.also { sb.append("$it \n") }
         sb.append("type ${info.className} struct { \n")
     }
@@ -30,7 +30,6 @@ internal object ConvertToGo {
         sb: StringBuffer,
         config: Convert2GoConfig
     ) {
-        val hasLombokInClass = info.hasDataLombok
         val fields = if (config.reservePrivateField) {
             info.publicFields + info.privateField
         } else {
@@ -38,9 +37,9 @@ internal object ConvertToGo {
         }
         fields.forEach { field ->
             if (config.expendJsonAlias) {
-                handleExpendJsonAlias(sb, field, hasLombokInClass)
+                handleExpendJsonAlias(sb, field)
             } else {
-                handleSimpleField(sb, field, null, hasLombokInClass)
+                handleSimpleField(sb, field, null)
                 sb.append(handleJsonTag(field.jsonAlias))
             }
             sb.append("\n")
@@ -50,7 +49,6 @@ internal object ConvertToGo {
     private fun handleSimpleField(
         sb: StringBuffer, field: FieldInfo,
         fieldName: String? = null,
-        hasLombokInClass: Boolean = false,
     ) {
         field.doc?.also {
             val tmp = it.removePrefix("/**")
@@ -82,7 +80,7 @@ internal object ConvertToGo {
         sb.append(handleType(field))
     }
 
-    private fun handleExpendJsonAlias(sb: StringBuffer, field: FieldInfo, hasLombokInClass: Boolean) {
+    private fun handleExpendJsonAlias(sb: StringBuffer, field: FieldInfo) {
         if (field.jsonAlias.isEmpty() || field.jsonAlias.size == 1) {
             sb.append("\t")
             handleSimpleField(sb, field)
