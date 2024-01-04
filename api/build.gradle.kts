@@ -1,9 +1,12 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 
 plugins {
     id("kotlin-conventions")
     id("spring-conventions")
 }
-
+tasks.withType<Jar> {
+    archivesName = rootProject.name
+}
 graalvmNative {
     binaries {
         named("main") {
