@@ -113,6 +113,8 @@ type Demo struct {
         strings = ["""
             @Data
        public class Demo{
+        private final int AAA = 1;
+        private static final int BBB = 1;
         /** 
          * A-Doc 
          * A2-Doc

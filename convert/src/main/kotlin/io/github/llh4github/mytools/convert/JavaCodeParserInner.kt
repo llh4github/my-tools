@@ -33,7 +33,10 @@ internal object JavaCodeParserInner {
     fun parseJavaClass(typeDeclaration: TypeDeclaration<*>): ClassInfo {
         val fieldNameFromMethod = typeDeclaration.fieldFromGetOrSetMethod()
         val hasLombok = typeDeclaration.hasClassLombokField()
-        val fields = typeDeclaration.fields.flatMap { parseFieldInfo(it) }
+        val fields = typeDeclaration.fields
+            .filter { !it.isFinal }
+            .filter { !it.isStatic }
+            .flatMap { parseFieldInfo(it) }
             .toList()
         return ClassInfo(
             typeDeclaration.nameAsString,
